@@ -93,7 +93,7 @@ def chdir(folder):
 ###############################################
 
 # write bucket name into files
-b_name = "isfs-terraform-%s" % args.environment
+b_name = "iac-terraform-%s" % args.environment
 name_replace('terraform.tf', 'terraform.tfvars', 'bucket_name', b_name)
 name_replace('accounts.tf', 'accounts.tfvars', 'bucket_name', b_name)
 
