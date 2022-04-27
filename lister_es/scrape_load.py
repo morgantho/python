@@ -34,7 +34,14 @@ def get_entry(url):
                     txt = soup.find("article", class_="text").get_text()
                     return txt
                 except:
-                    print(f'ERROR_URL: {url}')
+                    u2 = u
+                
+                    if 'tumblr' in u2:
+                        try:
+                            txt =soup.find("div", class_="template-post-content-body").get_text() 
+                            return txt
+                        except:
+                            print(f'ERROR_URL: {url}')
 
     if 'blogspot' in url:
         try:
@@ -107,6 +114,7 @@ def extract_push(es_obj):
                 if x['link']:
                     t = tr_extract(x)
                     count += 1
+                    
                     # skipping these sources as the formatting is difficult to work with
                     if t.get('credit') == 'ISAW':
                         break
@@ -114,7 +122,9 @@ def extract_push(es_obj):
                         break
                     elif "drive.google.com" in t.get('link'):
                         break
-       
+                    elif "annelisternorway.com" in t.get('link'):
+                        break
+
                     body = get_entry(t.get('link'))
                     entry = body.replace('\n', ' ').replace('\t', '').replace('\r', '').encode("ascii", "ignore").decode()
 
