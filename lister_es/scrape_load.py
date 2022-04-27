@@ -104,25 +104,27 @@ def extract_push(es_obj):
         if args.start in date:
 
             for x in d['Tr']:
-                count += 1
-                t = tr_extract(x)
-                
-                # skipping this source as the formatting is difficult to work with
-                if t.get('credit') == 'ISAW':
-                    break
-                elif "insearchofannwalker.com" in t.get('link'):
-                    break
+                if x['link']:
+                    t = tr_extract(x)
+                    count += 1
+                    # skipping these sources as the formatting is difficult to work with
+                    if t.get('credit') == 'ISAW':
+                        break
+                    elif "insearchofannwalker.com" in t.get('link'):
+                        break
+                    elif "drive.google.com" in t.get('link'):
+                        break
        
-                body = get_entry(t.get('link'))
-                entry = body.replace('\n', ' ').replace('\t', '').replace('\r', '').encode("ascii", "ignore").decode()
+                    body = get_entry(t.get('link'))
+                    entry = body.replace('\n', ' ').replace('\t', '').replace('\r', '').encode("ascii", "ignore").decode()
 
-                es_doc = {'date': w.get('date'), 'WYAS': w.get('wyas_link'), 'credit': t.get('credit'), 'type': t.get('type'), 'entry': entry, 'transcript': t.get('link') }
-                es_json = json.dumps(es_doc)
+                    es_doc = {'date': w.get('date'), 'WYAS': w.get('wyas_link'), 'credit': t.get('credit'), 'type': t.get('type'), 'entry': entry, 'transcript': t.get('link') }
+                    es_json = json.dumps(es_doc)
             
-                id = f'{date}.{count}'
-                print(f"ES PUSH FOR {id}" )
-                #print(es_json)
-                es_push(es_obj,id,es_json)
+                    id = f'{date}.{count}'
+                    print(f"ES PUSH FOR {id}" )
+                    #print(es_json)
+                    es_push(es_obj,id,es_json)
     
         elif args.end in date:
             with open(output, 'a') as o:
